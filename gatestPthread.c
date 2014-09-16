@@ -23,8 +23,9 @@
 
 //Global variables for threads
 unsigned static char Xgh,Xgl,Ygh,Ygl,Zgh,Zgl,Xh,Xl,Yh,Yl,Zh,Zl;
-long dt;
+double dt;
 int fd;
+int terminal = 0;
 
 
 
@@ -39,15 +40,9 @@ float myAbs(float value){
 }
 
 long getCurrentTime(){
-    long ms;
-    time_t s;
-    struct timespec spec;
-    clock_gettime(CLOCK_REALTIME, &spec);
-    s = spec.tv_sec;
-    ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
-    
-    printf("Current time: %d\n",ms);
-    return ms;
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec*1000 + tv.tv_usec/1000;
 }
 //Variable for thread
 //*******************
@@ -71,7 +66,7 @@ int readingGyro = 0;
 //Function for thread
 //*******************
 void* getAccData(void *v){
-   while(1){
+   while(!terminal){
          struct value *tempV = v;
          pthread_mutex_lock(&mutexReadingAcc);
          readingAcc = 1;
@@ -92,13 +87,13 @@ void* getAccData(void *v){
          readingAcc = 0;
          pthread_mutex_unlock(&mutexReadingAcc);
          printf("Received data from acc.\n");
-         sleep(1);
+         usleep(100);
       }
       
       return;
 }
 void* getGyroData(void *d){
-   while(1){
+   while(!terminal){
          struct degree *tempD = d;
          pthread_mutex_lock(&mutexReadingGyro);
          readingGyro = 1;
@@ -117,7 +112,8 @@ void* getGyroData(void *d){
          readingGyro = 0;
          pthread_mutex_unlock(&mutexReadingGyro);
          printf("Received data from gyro.\n");
-         sleep(1);
+         printf("now Xdg: %f\n", tempD->Xdg);
+         usleep(100);
    }
    
    return;
@@ -130,8 +126,8 @@ int main(){
    printf("Start!!\n");
    fd = wiringPiI2CSetup (0x68);
    wiringPiI2CWriteReg8 (fd,0x6B,0x01); //set the sleep unenable,chose clock source.
-   wiringPiI2CWriteReg8 (fd,0x19,0x00); //set sample rate divide = 0
-   wiringPiI2CWriteReg8 (fd,0x1A,0x00); //set gyroscope output rate = 8khz
+   wiringPiI2CWriteReg8 (fd,0x19,0x01); //set sample rate divide = 0
+   wiringPiI2CWriteReg8 (fd,0x1A,0x01); //set gyroscope output rate = 8khz
    // printf("set 0x6B=%Xn",wiringPiI2CReadReg8 (fd,0x6B));
 
    short Xvalue, Yvalue, Zvalue, Xgyro, Ygyro, Zgyro;
@@ -139,6 +135,8 @@ int main(){
    float pitch, roll, yaw, pitchACC, rollACC, yawACC;
    float pitch_cf=0, roll_cf=0, yaw_cf=0;
    float fma;
+   long lastTime, nowTime;
+   double tempDt;
 
    struct value valueStruct;
    struct degree degreeStruct;
@@ -159,15 +157,15 @@ int main(){
    printf("Creating thread.\n");
    pthread_create (&threadAcc, NULL, getAccData, (void *)&valueStruct);
    pthread_create (&threadGyro, NULL, getGyroData, (void *)&degreeStruct);
-   dt = getCurrentTime();
+   lastTime = getCurrentTime();
 
-   printf("Getting in to the while loop.\n");
-   while(i<100){
+   printf("Getting in to the while loop.%d\n", lastTime);
+   while(1){
       
       
-      while(readingAcc==1||readingGyro==1){
+      /*while(readingAcc==1||readingGyro==1){
             printf("Waiting for reading\n");
-      }
+      }*/
 
       //acc
       //********************************
@@ -215,9 +213,12 @@ int main(){
       else {
          Zd=0;
       }
-
-      dt = getCurrentTime()-dt;
-
+      
+      nowTime = getCurrentTime();
+      dt = ((double)nowTime-lastTime)/1000;
+      lastTime = nowTime;
+      
+      printf("Time eclipsed(s): %f\n", dt);
       pitch = pitch + Xd*dt;
       roll = roll + Yd*dt;
       yaw = yaw + Zd*dt;
@@ -246,7 +247,7 @@ int main(){
 
       // raw data
       //printf("===============================================================\n");
-      //printf(" Xdegree: %f, Ydegree: %f, Zdegree: %f    \n",Xdegree,Ydegree,Zdegree);
+      printf(" Xdegree: %f, Ydegree: %f, Zdegree: %f    \n",Xdegree,Ydegree,Zdegree);
       //printf(" Xd: %f, Yd: %f, Zd: %f    \n",Xd,Yd,Zd);
       //printf("===============================================================\n");
 
@@ -256,7 +257,7 @@ int main(){
       //printf("===============================================================\n");
       //printf(" pitch: %f, roll: %f, yaw: %f    \n",pitch,roll,yaw);
       //printf("---------------------------------------------------------------\n");
-      printf(" pitch_cf: %f, roll_cf: %f, yaw_cf: %f    \n",pitch_cf,roll_cf,yaw_cf);
+      //printf(" pitch_cf: %f, roll_cf: %f, yaw_cf: %f    \n",pitch_cf,roll_cf,yaw_cf);
       printf("===============================================================\n");
 
       //put data to file
@@ -264,11 +265,12 @@ int main(){
       i++;
       //gpio
       digitalWrite(testPin,LOW);
-      sleep(2);
+      usleep(100);
       //delay(500);
    }
    //pthread_mutex_destroy(&readingAcc);
    //pthread_mutex_destroy(&readingGyro);
+   terminal = 1;
    printf("End of the program.\n");
    pthread_exit(&threadAcc);
    pthread_exit(&threadGyro);
