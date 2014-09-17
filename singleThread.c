@@ -90,29 +90,29 @@ void* calculationThread(void* arg){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
-      // Xgh = wiringPiI2CReadReg8(fd, 0x3B);
-      // Xgl = wiringPiI2CReadReg8(fd, 0x3C);
+      Xgh = wiringPiI2CReadReg8(fd, 0x3B);
+      Xgl = wiringPiI2CReadReg8(fd, 0x3C);
 
-      // Ygh = wiringPiI2CReadReg8(fd, 0x3D);
-      // Ygl = wiringPiI2CReadReg8(fd, 0x3E);
+      Ygh = wiringPiI2CReadReg8(fd, 0x3D);
+      Ygl = wiringPiI2CReadReg8(fd, 0x3E);
 
-      // Zgh = wiringPiI2CReadReg8(fd, 0x3F);
-      // Zgl = wiringPiI2CReadReg8(fd, 0x40);
+      Zgh = wiringPiI2CReadReg8(fd, 0x3F);
+      Zgl = wiringPiI2CReadReg8(fd, 0x40);
 
-      // xValue = Xgh*256 + Xgl;
-      // yValue = Ygh*256 + Ygl;
-      // zValue = Zgh*256 + Zgl;
-      // Xg = (float)xValue / 16384;
-      // Yg = (float)yValue / 16384;
-      // Zg = (float)zValue / 16384;
+      xValue = Xgh*256 + Xgl;
+      yValue = Ygh*256 + Ygl;
+      zValue = Zgh*256 + Zgl;
+      Xg = (float)xValue / 16384;
+      Yg = (float)yValue / 16384;
+      Zg = (float)zValue / 16384;
 
-      // pa = sqrt(Xg*Xg + Zg*Zg);
-      // ra = sqrt(Yg*Yg + Zg*Zg);
-      // ya = sqrt(Xg*Xg + Yg*Yg);
+      pa = sqrt(Xg*Xg + Zg*Zg);
+      ra = sqrt(Yg*Yg + Zg*Zg);
+      ya = sqrt(Xg*Xg + Yg*Yg);
 
-      // pitchACC = atan(Yg/pa)*180/pi;
-      // rollACC = atan(Xg/ra)*180/pi;
-      // yawACC = atan(ya/Zg)*180/pi;
+      pitchACC = atan(Yg/pa)*180/pi;
+      rollACC = atan(Xg/ra)*180/pi;
+      yawACC = atan(ya/Zg)*180/pi;
 
       //Get and Set Gyro data
       //*********************
@@ -155,17 +155,17 @@ void* calculationThread(void* arg){
       dt = ((double)nowTime - lastTime)/1000;
       lastTime = nowTime;
 
-      // fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
+      fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
       
-      // pitch = pitch + Xd * dt;
-      // roll = roll + Yd * dt;
-      // yaw = yaw + Zd * dt;
+      pitch = pitch + Xd * dt;
+      roll = roll + Yd * dt;
+      yaw = yaw + Zd * dt;
 
-      // if (fma > ACC_THRESHOLD){
-      //    pitch_cf = (pitch_cf + xDegree * dt) * WEIGHT + pitchACC * (1 - WEIGHT);
-      //    roll_cf = (roll_cf - yDegree * dt) * WEIGHT + rollACC * (1 - WEIGHT);
-      //    yaw_cf = (yaw_cf + zDegree * dt) * WEIGHT + yawACC * (1 - WEIGHT);
-      // }
+      if (fma > ACC_THRESHOLD){
+         pitch_cf = (pitch_cf + xDegree * dt) * WEIGHT + pitchACC * (1 - WEIGHT);
+         roll_cf = (roll_cf - yDegree * dt) * WEIGHT + rollACC * (1 - WEIGHT);
+         yaw_cf = (yaw_cf + zDegree * dt) * WEIGHT + yawACC * (1 - WEIGHT);
+      }
       
 
       //Print the result
