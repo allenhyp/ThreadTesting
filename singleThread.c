@@ -178,9 +178,9 @@ void* calculationThread(void* arg){
          usleep(restTime);
       }
       i++;
-      // else{
-      //    printf("Timeout!\n");
-      // }
+      else{
+         printf("Timeout!\n");
+      }
    }
 }
 
