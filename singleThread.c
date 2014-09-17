@@ -44,32 +44,32 @@ double getCurrentTime(){
     return sec;
 }
 
-void threasholdOfDegree (float& X, float& Y, float& Z){
-   float tempX = X, tempY = Y, tempZ = Z; 
-   if (myAbs(tempX)>4) {
-      X=tempX+3.412214;
-   }
-   else {
-      X=0;
-   }
+// void threasholdOfDegree (float& X, float& Y, float& Z){
+//    float tempX = X, tempY = Y, tempZ = Z; 
+//    if (myAbs(tempX)>4) {
+//       X=tempX+3.412214;
+//    }
+//    else {
+//       X=0;
+//    }
 
-   // gyro Y offset
-   if (myAbs(tempY)>2) {
-      Y=tempY-1.342214;
-   }
-   else {
-      Y=0;
-   }
+//    // gyro Y offset
+//    if (myAbs(tempY)>2) {
+//       Y=tempY-1.342214;
+//    }
+//    else {
+//       Y=0;
+//    }
 
-   // gyro Z offset
-   if (myAbs(tempZ)>2) {
-      Z=tempZ-0.912214;
-   }
-   else {
-      Z=0;
-   }
-   return;
-}
+//    // gyro Z offset
+//    if (myAbs(tempZ)>2) {
+//       Z=tempZ-0.912214;
+//    }
+//    else {
+//       Z=0;
+//    }
+//    return;
+// }
 
 ////Variable for thread
 //*********************
@@ -79,6 +79,7 @@ void* calculationThread(void* arg){
    short xValue, yValue, zValue;
    float xDegree, yDegree, zDegree;
    float Xg, Yg, Zg, pa, ra, ya;
+   float Xd, Yd, Zd;
    float pitchACC, rollACC, yawACC;
    float pitch = 0, roll = 0, yaw = 0;
    float fma;
@@ -126,25 +127,45 @@ void* calculationThread(void* arg){
       Zl = wiringPiI2CReadReg8(fd, 0x48);
       zDegree = (float)(Zh * 256 + Zl) / 131;
 
-      threasholdOfDegree (&xDegree, &yDegree, &zDegree);    //the original Xd, Yd, Zd --> xDegree, yDegree, zDegree
+      if (myAbs(xDegree)>4) {
+         Xd=Xdegree+3.412214;
+      }
+      else {
+         Xd=0;
+      }
 
+      // gyro Y offset
+      if (myAbs(yDegree)>2) {
+         Yd=Ydegree-1.342214;
+      }
+      else {
+         Yd=0;
+      }
+
+      // gyro Z offset
+      if (myAbs(zDegree)>2) {
+         Zd=Zdegree-0.912214;
+      }
+      else {
+         Zd=0;
+      }
       //Get time eclipsed
       nowTime - getCurrentTime();
       dt = ((double)nowTime - lastTime)/1000;
       lastTime = nowTime;
 
       fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
+      
+      pitch = pitch + Xd * dt;
+      roll = roll + Yd * dt;
+      yaw = yaw + Zd * dt;
 
       if (fma > ACC_THRESHOLD){
          pitch_cf = (pitch_cf + xDegree * dt) * WEIGHT + pitchACC * (1 - WEIGHT);
          roll_cf = (roll_cf - yDegree * dt) * WEIGHT + rollACC * (1 - WEIGHT);
          yaw_cf = (yaw_cf + zDegree * dt) * WEIGHT + yawACC * (1 - WEIGHT);
       }
-      else {
-         pitch = pitch + xDegree * dt;
-         roll = roll + yDegree * dt;
-         yaw = yaw + zDegree * dt;
-      }
+      
 
       //Print the result
       printf("pitchACC: %f, rollACC: %f, yawACC: %f.\n", pitchACC, rollACC, yawACC);
@@ -177,7 +198,7 @@ int main(){
    pthread_attr_init(&attrMain);
    pthread_attr_setscope(&attrMain, PTHREAD_SCOPE_SYSTEM);
    parmMain.sched_priority = sched_get_priority_max (SCHED_FIFO);
-   ret = pthread_attr_setschedparam(&attrMain, SCHED_FIFO);
+   ret = pthread_attr_setschedparam(&attrMain, (int) SCHED_FIFO);
 
 
    int i = 0;
