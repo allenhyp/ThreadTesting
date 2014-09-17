@@ -177,10 +177,10 @@ void* calculationThread(void* arg){
       if (restTime < TIMELIMIT){
          usleep(restTime);
       }
-      i++;
       else{
          printf("Timeout!\n");
       }
+      i++;
    }
 }
 
