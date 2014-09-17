@@ -12,7 +12,7 @@
 
 #define pi 3.14159265359
 #define a 0.98
-#define COUNT 100
+#define COUNT 1000
 
 //gnuplot
 // #define NUM_POINTS 9999
