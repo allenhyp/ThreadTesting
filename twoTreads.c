@@ -89,7 +89,7 @@ void* getAccData(void *v){
          pthread_mutex_unlock(&mutexReadingAcc);
          // printf("Received data from acc.\n");
          while(readingAcc != 0){
-            usleep(1);
+            usleep(2);
          }
       }
       
@@ -117,7 +117,7 @@ void* getGyroData(void *d){
          // printf("Received data from gyro.\n");
          // printf("now Xdg: %f\n", tempD->Xdg);
          while(readingGyro != 0){
-            usleep(1);
+            usleep(2);
          }
          
    }
@@ -171,7 +171,7 @@ int main(){
       
       while(readingAcc!=2||readingGyro!=2){
             //printf("Waiting for reading\n");
-            usleep(1);
+            usleep(2);
       }
 
       //acc
@@ -225,7 +225,7 @@ int main(){
       dt = ((double)nowTime-lastTime)/1000;
       lastTime = nowTime;
       
-      printf("Time eclipsed(s): %f\n", dt);
+      //printf("Time eclipsed(s): %f\n", dt);
       pitch = pitch + Xd*dt;
       roll = roll + Yd*dt;
       yaw = yaw + Zd*dt;
