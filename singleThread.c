@@ -90,70 +90,70 @@ void* calculationThread(void* arg){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
-      Xgh = wiringPiI2CReadReg8(fd, 0x3B);
-      Xgl = wiringPiI2CReadReg8(fd, 0x3C);
+      // Xgh = wiringPiI2CReadReg8(fd, 0x3B);
+      // Xgl = wiringPiI2CReadReg8(fd, 0x3C);
 
-      Ygh = wiringPiI2CReadReg8(fd, 0x3D);
-      Ygl = wiringPiI2CReadReg8(fd, 0x3E);
+      // Ygh = wiringPiI2CReadReg8(fd, 0x3D);
+      // Ygl = wiringPiI2CReadReg8(fd, 0x3E);
 
-      Zgh = wiringPiI2CReadReg8(fd, 0x3F);
-      Zgl = wiringPiI2CReadReg8(fd, 0x40);
+      // Zgh = wiringPiI2CReadReg8(fd, 0x3F);
+      // Zgl = wiringPiI2CReadReg8(fd, 0x40);
 
-      xValue = Xgh*256 + Xgl;
-      yValue = Ygh*256 + Ygl;
-      zValue = Zgh*256 + Zgl;
-      Xg = (float)xValue / 16384;
-      Yg = (float)yValue / 16384;
-      Zg = (float)zValue / 16384;
+      // xValue = Xgh*256 + Xgl;
+      // yValue = Ygh*256 + Ygl;
+      // zValue = Zgh*256 + Zgl;
+      // Xg = (float)xValue / 16384;
+      // Yg = (float)yValue / 16384;
+      // Zg = (float)zValue / 16384;
 
-      pa = sqrt(Xg*Xg + Zg*Zg);
-      ra = sqrt(Yg*Yg + Zg*Zg);
-      ya = sqrt(Xg*Xg + Yg*Yg);
+      // pa = sqrt(Xg*Xg + Zg*Zg);
+      // ra = sqrt(Yg*Yg + Zg*Zg);
+      // ya = sqrt(Xg*Xg + Yg*Yg);
 
-      pitchACC = atan(Yg/pa)*180/pi;
-      rollACC = atan(Xg/ra)*180/pi;
-      yawACC = atan(ya/Zg)*180/pi;
+      // pitchACC = atan(Yg/pa)*180/pi;
+      // rollACC = atan(Xg/ra)*180/pi;
+      // yawACC = atan(ya/Zg)*180/pi;
 
       //Get and Set Gyro data
       //*********************
-      // Xh = wiringPiI2CReadReg8(fd, 0x43);
-      // Xl = wiringPiI2CReadReg8(fd, 0x44);
-      // xDegree = (float)(Xh * 256 + Xl) / 131;
+      Xh = wiringPiI2CReadReg8(fd, 0x43);
+      Xl = wiringPiI2CReadReg8(fd, 0x44);
+      xDegree = (float)(Xh * 256 + Xl) / 131;
 
-      // Yh = wiringPiI2CReadReg8(fd, 0x45);
-      // Yl = wiringPiI2CReadReg8(fd, 0x46);
-      // yDegree = -(float)(Yh * 256 + Yl) / 131;
+      Yh = wiringPiI2CReadReg8(fd, 0x45);
+      Yl = wiringPiI2CReadReg8(fd, 0x46);
+      yDegree = -(float)(Yh * 256 + Yl) / 131;
 
-      // Zh = wiringPiI2CReadReg8(fd, 0x47);
-      // Zl = wiringPiI2CReadReg8(fd, 0x48);
-      // zDegree = (float)(Zh * 256 + Zl) / 131;
+      Zh = wiringPiI2CReadReg8(fd, 0x47);
+      Zl = wiringPiI2CReadReg8(fd, 0x48);
+      zDegree = (float)(Zh * 256 + Zl) / 131;
 
-      // if (myAbs(xDegree)>4) {
-      //    Xd=xDegree+3.412214;
-      // }
-      // else {
-      //    Xd=0;
-      // }
+      if (myAbs(xDegree)>4) {
+         Xd=xDegree+3.412214;
+      }
+      else {
+         Xd=0;
+      }
 
-      // // gyro Y offset
-      // if (myAbs(yDegree)>2) {
-      //    Yd=yDegree-1.342214;
-      // }
-      // else {
-      //    Yd=0;
-      // }
+      // gyro Y offset
+      if (myAbs(yDegree)>2) {
+         Yd=yDegree-1.342214;
+      }
+      else {
+         Yd=0;
+      }
 
-      // // gyro Z offset
-      // if (myAbs(zDegree)>2) {
-      //    Zd=zDegree-0.912214;
-      // }
-      // else {
-      //    Zd=0;
-      // }
-      // //Get time eclipsed
-      // nowTime - getCurrentTime();
-      // dt = ((double)nowTime - lastTime)/1000;
-      // lastTime = nowTime;
+      // gyro Z offset
+      if (myAbs(zDegree)>2) {
+         Zd=zDegree-0.912214;
+      }
+      else {
+         Zd=0;
+      }
+      //Get time eclipsed
+      nowTime - getCurrentTime();
+      dt = ((double)nowTime - lastTime)/1000;
+      lastTime = nowTime;
 
       // fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
       
