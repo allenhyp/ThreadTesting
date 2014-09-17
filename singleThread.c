@@ -14,7 +14,7 @@
 #define WEIGHT 0.98
 #define ACC_THRESHOLD 5
 #define TIMELIMIT 2.5
-#define COUNT 500
+#define COUNT 1000
 //gnuplot
 // #define NUM_POINTS 9999
 // FILE * dataFILE;
@@ -176,7 +176,7 @@ void* calculationThread(void* arg){
       //Sleep for the rest of time
       restTime = cycleStartTime - getCurrentTime();
       if (restTime < TIMELIMIT){
-         //printf("restTime: %f.\n", restTime);
+         printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
       }
       else{
