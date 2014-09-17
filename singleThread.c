@@ -174,9 +174,9 @@ void* calculationThread(void* arg){
       // printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
 
       //Sleep for the rest of time
-      restTime = cycleStartTime - getCurrentTime();
+      restTime = getCurrentTime() - cycleStartTime;
       if (restTime < TIMELIMIT){
-         printf("restTime: %f.\n", restTime);
+         //printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
       }
       else{
