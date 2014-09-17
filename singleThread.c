@@ -176,8 +176,8 @@ void* calculationThread(void* arg){
       //Sleep for the rest of time
       restTime = cycleStartTime - getCurrentTime();
       if (restTime < TIMELIMIT){
-         //printf("restTime:\n");
-         usleep(restTime);
+         //printf("restTime: %f.\n", restTime);
+         usleep(TIMELIMIT - restTime);
       }
       else{
          printf("Timeout!\n");
