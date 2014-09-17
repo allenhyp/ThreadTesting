@@ -40,7 +40,7 @@ float myAbs(float value){
 double getCurrentTime(){
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    double sec = tv.tv_sec*1000 + tv.tv_usec/1000
+    double sec = tv.tv_sec*1000 + tv.tv_usec/1000;
     return sec;
 }
 
@@ -73,15 +73,16 @@ void thredshold(float &X, float &Y, float &Z){
 ////Variable for thread
 //*********************
 
-void* calculationThread(void*){
+void* calculationThread(void* arg){
    unsigned static char Xgh,Xgl,Ygh,Ygl,Zgh,Zgl,Xh,Xl,Yh,Yl,Zh,Zl;
    short xValue, yValue, zValue;
    float xDegree, yDegree, zDegree;
    float Xg, Yg, Zg, pa, ra, ya;
    float pitchACC, rollACC, yawACC;
    float pitch = 0, roll = 0, yaw = 0;
+   float fma;
 
-   start the loop;
+   //Start the loop
    while(1){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
@@ -168,19 +169,19 @@ int main(){
    wiringPiI2CWriteReg8 (fd,0x1A,0x01); //set gyroscope output rate = 8khz
 
    //Setup pthread
-   void arg;
+   int ret;
    pthread_t threadAlgo;
    pthread_attr_t attrMain;
    struct sched_param parmMain;
    pthread_attr_init(&attrMain);
    pthread_attr_setscope(&attrMain, PTHREAD_SCOPE_SYSTEM);
-   parmMain.priority = sched_get_priority_max (SCHED_FIFO);
-   pthread_attr_setschedparam(&attrMain, SCHED_FIFO, &parmMain);
+   parmMain.sched_priority = sched_get_priority_max (SCHED_FIFO);
+   ret = pthread_attr_setschedparam(&attrMain, SCHED_FIFO, &parmMain);
 
 
    int i = 0;
    lastTime - getCurrentTime();
-   pthread_create (&threadAlgo, &attrMain, calculationThread, (void*) arg);
+   pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
    while(1){
       printf("Loop....\n");
       sleep(1);
