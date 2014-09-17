@@ -87,9 +87,9 @@ void* getAccData(void *v){
          
          readingAcc = 2;
          pthread_mutex_unlock(&mutexReadingAcc);
-         printf("Received data from acc.\n");
+         // printf("Received data from acc.\n");
          while(readingAcc != 0){
-            usleep(1);
+            //usleep(1);
          }
       }
       
@@ -114,10 +114,10 @@ void* getGyroData(void *d){
          
          readingGyro = 2;
          pthread_mutex_unlock(&mutexReadingGyro);
-         printf("Received data from gyro.\n");
-         printf("now Xdg: %f\n", tempD->Xdg);
+         // printf("Received data from gyro.\n");
+         // printf("now Xdg: %f\n", tempD->Xdg);
          while(readingGyro != 0){
-            usleep(1);
+            //usleep(1);
          }
          
    }
@@ -156,7 +156,7 @@ int main(){
    // digitalWrite(testPin,LOW);
 
    // //file
-   int i = COUNT;
+   int i = 0;
    // dataFILE = fopen("data.temp", "w");
    // gnuplotPipe = popen ("gnuplot -persistent", "w");
    // gnuplotPipe1 = popen ("gnuplot -persistent", "w");
@@ -166,12 +166,12 @@ int main(){
    lastTime = getCurrentTime();
 
    printf("Getting in to the while loop.%d\n", lastTime);
-   while(1){
+   while(i < COUNT){
       
       
       while(readingAcc!=2||readingGyro!=2){
             printf("Waiting for reading\n");
-            usleep(1);
+            //usleep(1);
       }
 
       //acc
@@ -257,24 +257,24 @@ int main(){
 
       // raw data
       //printf("===============================================================\n");
-      printf(" Xdegree: %f, Ydegree: %f, Zdegree: %f    \n",Xdegree,Ydegree,Zdegree);
+      //printf(" Xdegree: %f, Ydegree: %f, Zdegree: %f    \n",Xdegree,Ydegree,Zdegree);
       //printf(" Xd: %f, Yd: %f, Zd: %f    \n",Xd,Yd,Zd);
       //printf("===============================================================\n");
 
-      printf(" pitchacc: %f, rollacc: %f, yawacc: %f    \n",pitchACC,rollACC,yawACC);
+      //printf(" pitchacc: %f, rollacc: %f, yawacc: %f    \n",pitchACC,rollACC,yawACC);
       //printf (" fma: %f  \n",fma);
       // aero data
       //printf("===============================================================\n");
       //printf(" pitch: %f, roll: %f, yaw: %f    \n",pitch,roll,yaw);
       //printf("---------------------------------------------------------------\n");
       //printf(" pitch_cf: %f, roll_cf: %f, yaw_cf: %f    \n",pitch_cf,roll_cf,yaw_cf);
-      printf("===============================================================\n");
+      //printf("===============================================================\n");
 
       //put data to file
       //fprintf(dataFILE, "%d %f %f %f %f %f %f\n", i , rollACC, roll, roll_cf, pitchACC, pitch, pitch_cf); 
       i++;
       //gpio
-      digitalWrite(testPin,LOW);
+      //digitalWrite(testPin,LOW);
       //usleep(10);
       //delay(500);
    }
