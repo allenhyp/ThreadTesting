@@ -12,7 +12,7 @@
 
 #define pi 3.14159265359
 #define a 0.98
-#define COUNT 1000
+#define COUNT 100
 
 //gnuplot
 // #define NUM_POINTS 9999
@@ -89,7 +89,7 @@ void* getAccData(void *v){
          pthread_mutex_unlock(&mutexReadingAcc);
          // printf("Received data from acc.\n");
          while(readingAcc != 0){
-            //usleep(1);
+            usleep(1);
          }
       }
       
@@ -117,7 +117,7 @@ void* getGyroData(void *d){
          // printf("Received data from gyro.\n");
          // printf("now Xdg: %f\n", tempD->Xdg);
          while(readingGyro != 0){
-            //usleep(1);
+            usleep(1);
          }
          
    }
@@ -170,8 +170,8 @@ int main(){
       
       
       while(readingAcc!=2||readingGyro!=2){
-            printf("Waiting for reading\n");
-            //usleep(1);
+            //printf("Waiting for reading\n");
+            usleep(1);
       }
 
       //acc
