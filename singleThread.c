@@ -44,7 +44,7 @@ double getCurrentTime(){
     return sec;
 }
 
-void thredshold(float &X, float &Y, float &Z){
+void threasholdOfDegree(float &X, float &Y, float &Z){
    float tempX = X, tempY = Y, tempZ = Z; 
    if (myAbs(tempX)>4) {
       X=tempX+3.412214;
@@ -125,7 +125,7 @@ void* calculationThread(void* arg){
       Zl = wiringPiI2CReadReg8(fd, 0x48);
       zDegree = (float)(Zh * 256 + Zl) / 131;
 
-      thredshold(&xDegree, &yDegree, &zDegree);    //the original Xd, Yd, Zd --> xDegree, yDegree, zDegree
+      threasholdOfDegree(&xDegree, &yDegree, &zDegree);    //the original Xd, Yd, Zd --> xDegree, yDegree, zDegree
 
       //Get time eclipsed
       nowTime - getCurrentTime();
@@ -176,7 +176,7 @@ int main(){
    pthread_attr_init(&attrMain);
    pthread_attr_setscope(&attrMain, PTHREAD_SCOPE_SYSTEM);
    parmMain.sched_priority = sched_get_priority_max (SCHED_FIFO);
-   ret = pthread_attr_setschedparam(&attrMain, SCHED_FIFO, &parmMain);
+   pthread_attr_setschedparam(&attrMain, SCHED_FIFO);
 
 
    int i = 0;
