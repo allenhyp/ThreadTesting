@@ -13,7 +13,8 @@
 #define pi 3.14159265359
 #define WEIGHT 0.98
 #define ACC_THRESHOLD 5
-#define TIMELIMIT 1
+#define TIMELIMIT 2.5
+#define COUNT 500
 //gnuplot
 // #define NUM_POINTS 9999
 // FILE * dataFILE;
@@ -85,7 +86,7 @@ void* calculationThread(void* arg){
    float fma;
    int i = 0;
    //Start the loop
-   while(i<1000){
+   while(i<COUNT){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
@@ -175,6 +176,7 @@ void* calculationThread(void* arg){
       //Sleep for the rest of time
       restTime = cycleStartTime - getCurrentTime();
       if (restTime < TIMELIMIT){
+         //printf("restTime:\n");
          usleep(restTime);
       }
       else{
