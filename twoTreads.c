@@ -284,8 +284,8 @@ int main(){
    //pthread_mutex_destroy(&readingGyro);
    terminal = 1;
    printf("End of the program.\n");
-   pthread_exit(&threadAcc);
-   pthread_exit(&threadGyro);
+   //pthread_exit(&threadAcc);
+   //pthread_exit(&threadGyro);
    return 0;
 }
 
