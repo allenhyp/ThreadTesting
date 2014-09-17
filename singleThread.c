@@ -83,9 +83,9 @@ void* calculationThread(void* arg){
    float pitchACC, rollACC, yawACC;
    float pitch = 0, roll = 0, yaw = 0;
    float fma;
-
+   int i = 0;
    //Start the loop
-   while(1){
+   while(i<1000){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
@@ -168,18 +168,19 @@ void* calculationThread(void* arg){
       
 
       //Print the result
-      printf("pitchACC: %f, rollACC: %f, yawACC: %f.\n", pitchACC, rollACC, yawACC);
-      printf("pitch: %f, roll: %f, yaw: %f.\n", pitch, roll, yaw);
-      printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
+      // printf("pitchACC: %f, rollACC: %f, yawACC: %f.\n", pitchACC, rollACC, yawACC);
+      // printf("pitch: %f, roll: %f, yaw: %f.\n", pitch, roll, yaw);
+      // printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
 
       //Sleep for the rest of time
       restTime = cycleStartTime - getCurrentTime();
       if (restTime < TIMELIMIT){
          usleep(restTime);
       }
-      else{
-         printf("Timeout!\n");
-      }
+      i++;
+      // else{
+      //    printf("Timeout!\n");
+      // }
    }
 }
 
@@ -205,7 +206,7 @@ int main(){
    lastTime - getCurrentTime();
    pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
    while(1){
-      printf("Loop....\n");
+      //printf("Loop....\n");
       sleep(1);
    }
    return 0;
