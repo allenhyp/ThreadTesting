@@ -205,7 +205,10 @@ int main(){
    int i = 0;
    lastTime - getCurrentTime();
    pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
-   while(!pthread_join(threadAlgo, NULL)){}
+   printf("Started.\n");
+   while(!pthread_join(threadAlgo, NULL)){
+      printf("ing\n");
+   }
    pthread_exit(&threadAlgo);
    printf("ENDED\n");
    return 0;
