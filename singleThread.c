@@ -205,9 +205,8 @@ int main(){
    int i = 0;
    lastTime - getCurrentTime();
    pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
-   while(1){
-      //printf("Loop....\n");
-      sleep(1);
-   }
+   while(!pthread_join(&threadAlgo)){}
+   pthread_exit(&threadAlgo);
+   printf("ENDED\n");
    return 0;
 }
