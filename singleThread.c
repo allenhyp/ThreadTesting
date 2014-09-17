@@ -116,56 +116,56 @@ void* calculationThread(void* arg){
 
       //Get and Set Gyro data
       //*********************
-      Xh = wiringPiI2CReadReg8(fd, 0x43);
-      Xl = wiringPiI2CReadReg8(fd, 0x44);
-      xDegree = (float)(Xh * 256 + Xl) / 131;
+      // Xh = wiringPiI2CReadReg8(fd, 0x43);
+      // Xl = wiringPiI2CReadReg8(fd, 0x44);
+      // xDegree = (float)(Xh * 256 + Xl) / 131;
 
-      Yh = wiringPiI2CReadReg8(fd, 0x45);
-      Yl = wiringPiI2CReadReg8(fd, 0x46);
-      yDegree = -(float)(Yh * 256 + Yl) / 131;
+      // Yh = wiringPiI2CReadReg8(fd, 0x45);
+      // Yl = wiringPiI2CReadReg8(fd, 0x46);
+      // yDegree = -(float)(Yh * 256 + Yl) / 131;
 
-      Zh = wiringPiI2CReadReg8(fd, 0x47);
-      Zl = wiringPiI2CReadReg8(fd, 0x48);
-      zDegree = (float)(Zh * 256 + Zl) / 131;
+      // Zh = wiringPiI2CReadReg8(fd, 0x47);
+      // Zl = wiringPiI2CReadReg8(fd, 0x48);
+      // zDegree = (float)(Zh * 256 + Zl) / 131;
 
-      if (myAbs(xDegree)>4) {
-         Xd=xDegree+3.412214;
-      }
-      else {
-         Xd=0;
-      }
+      // if (myAbs(xDegree)>4) {
+      //    Xd=xDegree+3.412214;
+      // }
+      // else {
+      //    Xd=0;
+      // }
 
-      // gyro Y offset
-      if (myAbs(yDegree)>2) {
-         Yd=yDegree-1.342214;
-      }
-      else {
-         Yd=0;
-      }
+      // // gyro Y offset
+      // if (myAbs(yDegree)>2) {
+      //    Yd=yDegree-1.342214;
+      // }
+      // else {
+      //    Yd=0;
+      // }
 
-      // gyro Z offset
-      if (myAbs(zDegree)>2) {
-         Zd=zDegree-0.912214;
-      }
-      else {
-         Zd=0;
-      }
-      //Get time eclipsed
-      nowTime - getCurrentTime();
-      dt = ((double)nowTime - lastTime)/1000;
-      lastTime = nowTime;
+      // // gyro Z offset
+      // if (myAbs(zDegree)>2) {
+      //    Zd=zDegree-0.912214;
+      // }
+      // else {
+      //    Zd=0;
+      // }
+      // //Get time eclipsed
+      // nowTime - getCurrentTime();
+      // dt = ((double)nowTime - lastTime)/1000;
+      // lastTime = nowTime;
 
-      fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
+      // fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
       
-      pitch = pitch + Xd * dt;
-      roll = roll + Yd * dt;
-      yaw = yaw + Zd * dt;
+      // pitch = pitch + Xd * dt;
+      // roll = roll + Yd * dt;
+      // yaw = yaw + Zd * dt;
 
-      if (fma > ACC_THRESHOLD){
-         pitch_cf = (pitch_cf + xDegree * dt) * WEIGHT + pitchACC * (1 - WEIGHT);
-         roll_cf = (roll_cf - yDegree * dt) * WEIGHT + rollACC * (1 - WEIGHT);
-         yaw_cf = (yaw_cf + zDegree * dt) * WEIGHT + yawACC * (1 - WEIGHT);
-      }
+      // if (fma > ACC_THRESHOLD){
+      //    pitch_cf = (pitch_cf + xDegree * dt) * WEIGHT + pitchACC * (1 - WEIGHT);
+      //    roll_cf = (roll_cf - yDegree * dt) * WEIGHT + rollACC * (1 - WEIGHT);
+      //    yaw_cf = (yaw_cf + zDegree * dt) * WEIGHT + yawACC * (1 - WEIGHT);
+      // }
       
 
       //Print the result
@@ -179,9 +179,9 @@ void* calculationThread(void* arg){
          //printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
       }
-      else{
-         printf("Timeout!\n");
-      }
+      // else{
+      //    printf("Timeout!\n");
+      // }
       i++;
    }
 }
