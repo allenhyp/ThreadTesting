@@ -128,7 +128,7 @@ void* calculationThread(void* arg){
       zDegree = (float)(Zh * 256 + Zl) / 131;
 
       if (myAbs(xDegree)>4) {
-         Xd=Xdegree+3.412214;
+         Xd=xDegree+3.412214;
       }
       else {
          Xd=0;
@@ -136,7 +136,7 @@ void* calculationThread(void* arg){
 
       // gyro Y offset
       if (myAbs(yDegree)>2) {
-         Yd=Ydegree-1.342214;
+         Yd=yDegree-1.342214;
       }
       else {
          Yd=0;
@@ -144,7 +144,7 @@ void* calculationThread(void* arg){
 
       // gyro Z offset
       if (myAbs(zDegree)>2) {
-         Zd=Zdegree-0.912214;
+         Zd=zDegree-0.912214;
       }
       else {
          Zd=0;
@@ -198,7 +198,7 @@ int main(){
    pthread_attr_init(&attrMain);
    pthread_attr_setscope(&attrMain, PTHREAD_SCOPE_SYSTEM);
    parmMain.sched_priority = sched_get_priority_max (SCHED_FIFO);
-   ret = pthread_attr_setschedparam(&attrMain, (int) SCHED_FIFO);
+   //ret = pthread_attr_setschedparam(&attrMain, (int) SCHED_FIFO);
 
 
    int i = 0;
