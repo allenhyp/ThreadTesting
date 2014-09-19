@@ -183,9 +183,9 @@ void* calculationThread(void* arg){
          printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
       }
-      // else{
-      //    printf("Timeout!\n");
-      // }
+      else{
+         printf("Timeout!\n");
+      }
       i++;
    }
 }
