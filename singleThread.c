@@ -14,7 +14,7 @@
 #define pi 3.14159265359
 #define WEIGHT 0.98
 #define ACC_THRESHOLD 5
-#define TIMELIMIT 10000
+#define TIMELIMIT 2500
 #define COUNT 1000
 //gnuplot
 // #define NUM_POINTS 9999
@@ -174,8 +174,8 @@ void* calculationThread(void* arg){
       // Print the result
       // printf("pitchACC: %f, rollACC: %f, yawACC: %f.\n", pitchACC, rollACC, yawACC);
       // printf("pitch: %f, roll: %f, yaw: %f.\n", pitch, roll, yaw);
-      printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
-      printf("===================================================================\n");
+      // printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
+      // printf("===================================================================\n");
 
       // Sleep for the rest of time
       restTime = getCurrentTimeInMicro() - cycleStartTime;
