@@ -204,7 +204,7 @@ int main(){
    struct sched_param parmMain;
    pthread_attr_init(&attrMain);
    pthread_attr_setscope(&attrMain, PTHREAD_SCOPE_SYSTEM);
-   parmMain.sched_priority = sched_get_priority_max (SCHED_RR);
+   parmMain.sched_priority = sched_get_priority_max (SCHED_FIFO);
    ret = pthread_attr_setschedparam(&attrMain, &parmMain);
 
 
