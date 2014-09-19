@@ -198,8 +198,8 @@ void* calculationThread(void* arg){
       //Print the result
       // printf("pitchACC: %f, rollACC: %f, yawACC: %f.\n", pitchACC, rollACC, yawACC);
       // printf("pitch: %f, roll: %f, yaw: %f.\n", pitch, roll, yaw);
-      printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
-      printf("===================================================================\n");
+      // printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
+      // printf("===================================================================\n");
 
       //Sleep for the rest of time
       restTime = getCurrentTime() - cycleStartTime;
@@ -239,7 +239,7 @@ int main(){
    while(!pthread_join(threadAlgo, NULL)){
       //printf("ing\n");
    }
-   //printf("ENDED\n");
+   printf("ENDED\n");
    pthread_exit(&threadAlgo);
    return 0;
 }
