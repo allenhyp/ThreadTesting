@@ -28,7 +28,7 @@
 // double lastTime, nowTime;
 // double cycleStartTime, restTime;
 // double dt;
-// int fd;
+int fd;
 // float pitch_cf = 0, roll_cf = 0, yaw_cf = 0;
 
 
@@ -130,7 +130,7 @@ int main(){
    pthread_attr_init(&attrMain);
    pthread_attr_setscope(&attrMain, PTHREAD_SCOPE_SYSTEM);
    parmMain.sched_priority = sched_get_priority_max (SCHED_FIFO);
-   ret = pthread_attr_setschedparam(&attrMain, (int) SCHED_FIFO);
+   // ret = pthread_attr_setschedparam(&attrMain, (int) SCHED_FIFO);
 
 
    // lastTime - getCurrentTime();
