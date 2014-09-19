@@ -14,7 +14,7 @@
 #define pi 3.14159265359
 #define WEIGHT 0.98
 #define ACC_THRESHOLD 5
-#define TIMELIMIT 3
+#define TIMELIMIT 10000
 #define COUNT 1000
 //gnuplot
 // #define NUM_POINTS 9999
@@ -39,10 +39,10 @@ float myAbs(float value){
       return -value;
 }
 
-double getCurrentTime(){
+double getCurrentTimeInMicro(){
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    double sec = tv.tv_sec*1000 + tv.tv_usec/1000;
+    double sec = tv.tv_sec*1000000 + tv.tv_usec;
     return sec;
 }
 
@@ -88,7 +88,7 @@ void* calculationThread(void* arg){
    int i = 0;
    //Start the loop
    while(i<COUNT){
-      cycleStartTime = getCurrentTime();
+      cycleStartTime = getCurrentTimeInMicro();
       //Get and Set Acc data
       //********************
       Xgh = wiringPiI2CReadReg8(fd, 0x3B);
@@ -154,8 +154,8 @@ void* calculationThread(void* arg){
          Zd=0;
       }
       //Get time eclipsed
-      nowTime - getCurrentTime();
-      dt = ((double)nowTime - lastTime)/1000;
+      nowTime - getCurrentTimeInMicro();
+      dt = ((double)nowTime - lastTime)/1000000;
       lastTime = nowTime;
 
       fma = myAbs(pitchACC) + myAbs(rollACC) + myAbs(yawACC);
@@ -178,7 +178,7 @@ void* calculationThread(void* arg){
       // printf("===================================================================\n");
 
       //Sleep for the rest of time
-      restTime = getCurrentTime() - cycleStartTime;
+      restTime = getCurrentTimeInMicro() - cycleStartTime;
       if (restTime < TIMELIMIT){
          // printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
@@ -208,7 +208,7 @@ int main(){
    ret = pthread_attr_setschedparam(&attrMain, &parmMain);
 
 
-   lastTime - getCurrentTime();
+   lastTime - getCurrentTimeInMicro();
    pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
    printf("Started.\n");
    while(!pthread_join(threadAlgo, NULL)){
