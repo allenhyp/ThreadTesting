@@ -13,7 +13,7 @@
 #define pi 3.14159265359
 #define WEIGHT 0.98
 #define ACC_THRESHOLD 5
-#define TIMELIMIT 2.5
+#define TIMELIMIT 100
 #define COUNT 1000
 //gnuplot
 // #define NUM_POINTS 9999
@@ -77,6 +77,7 @@ double getCurrentTime(){
 
 void* calculationThread(void* arg){
    unsigned static char Xgh,Xgl,Ygh,Ygl,Zgh,Zgl,Xh,Xl,Yh,Yl,Zh,Zl;
+   uint16_t xGyroData, yGyroData, zGyroData, xAccData, yAccData, zAccData;
    short xValue, yValue, zValue;
    float xDegree, yDegree, zDegree;
    float Xg, Yg, Zg, pa, ra, ya;
@@ -99,9 +100,24 @@ void* calculationThread(void* arg){
       Zgh = wiringPiI2CReadReg8(fd, 0x3F);
       Zgl = wiringPiI2CReadReg8(fd, 0x40);
 
-      xValue = Xgh*256 + Xgl;
-      yValue = Ygh*256 + Ygl;
-      zValue = Zgh*256 + Zgl;
+
+      //Check if we use the 16-bit register
+      xAccData = wiringPiI2CReadReg16(fd, 0x3B);
+      yAccData = wiringPiI2CReadReg16(fd, 0x3C);
+      zAccData = wiringPiI2CReadReg16(fd, 0x3D);
+
+      printf("Xgh: %X, Xgl: %X.\n", Xgh, Xgl);
+      printf("xAccData: %X.\n", xAccData);
+
+      xValue = xAccData>>8;
+      xValue = xValue + xAccData<<8;
+      yValue = xAccData>>8;
+      yValue = yValue + yAccData<<8;
+      zValue = zAccData>>8;
+      zValue = zValue + zAccData<<8;
+      // xValue = Xgh*256 + Xgl;
+      // yValue = Ygh*256 + Ygl;
+      // zValue = Zgh*256 + Zgl;
       Xg = (float)xValue / 16384;
       Yg = (float)yValue / 16384;
       Zg = (float)zValue / 16384;
