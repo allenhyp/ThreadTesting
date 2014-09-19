@@ -87,7 +87,7 @@ void* calculationThread(void* arg){
    float fma;
    int i = 0;
    //Start the loop
-   while(1){
+   while(i<COUNT){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
