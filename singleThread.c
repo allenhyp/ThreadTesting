@@ -14,7 +14,7 @@
 #define pi 3.14159265359
 #define WEIGHT 0.98
 #define ACC_THRESHOLD 5
-#define TIMELIMIT 2.5
+#define TIMELIMIT 3
 #define COUNT 1000
 //gnuplot
 // #define NUM_POINTS 9999
