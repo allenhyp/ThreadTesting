@@ -78,8 +78,7 @@ double getCurrentTime(){
 
 void* calculationThread(void* arg){
    unsigned static char Xgh,Xgl,Ygh,Ygl,Zgh,Zgl,Xh,Xl,Yh,Yl,Zh,Zl;
-   uint16_t xGyroData, yGyroData, zGyroData, xAccData, yAccData, zAccData;
-   uint16_t xValue, yValue, zValue;
+   short xValue, yValue, zValue;
    float xDegree, yDegree, zDegree;
    float Xg, Yg, Zg, pa, ra, ya;
    float Xd, Yd, Zd;
@@ -92,36 +91,19 @@ void* calculationThread(void* arg){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
-      // Xgh = wiringPiI2CReadReg8(fd, 0x3B);
-      // Xgl = wiringPiI2CReadReg8(fd, 0x3C);
+      Xgh = wiringPiI2CReadReg8(fd, 0x3B);
+      Xgl = wiringPiI2CReadReg8(fd, 0x3C);
 
-      // Ygh = wiringPiI2CReadReg8(fd, 0x3D);
-      // Ygl = wiringPiI2CReadReg8(fd, 0x3E);
+      Ygh = wiringPiI2CReadReg8(fd, 0x3D);
+      Ygl = wiringPiI2CReadReg8(fd, 0x3E);
 
-      // Zgh = wiringPiI2CReadReg8(fd, 0x3F);
-      // Zgl = wiringPiI2CReadReg8(fd, 0x40);
-      // xValue = Xgh*256 + Xgl;
-      // yValue = Ygh*256 + Ygl;
-      // zValue = Zgh*256 + Zgl;
-
-      //Check if we use the 16-bit register
-      xAccData = wiringPiI2CReadReg16(fd, 0x3B);
-      yAccData = wiringPiI2CReadReg16(fd, 0x3D);
-      zAccData = wiringPiI2CReadReg16(fd, 0x3F);
-
-      // printf("Xgh: %X, Xgl: %X, Ygh: %X, Ygl: %X, Zgh: %X, Zgl: %X.\n", Xgh, Xgl, Ygh, Ygl, Zgh, Zgl);
-      // printf("xAccData: %X., yAccData: %X, zAccData: %X.\n", xAccData, yAccData, zAccData);
-
-      xValue = xAccData>>8;
-      xValue = xValue + xAccData<<8;
-      yValue = xAccData>>8;
-      yValue = yValue + yAccData<<8;
-      zValue = zAccData>>8;
-      zValue = zValue + zAccData<<8;
-      // printf("xValue: %X, yValue: %X, zValue: %X.\n", xValue, yValue, zValue);
+      Zgh = wiringPiI2CReadReg8(fd, 0x3F);
+      Zgl = wiringPiI2CReadReg8(fd, 0x40);
       
+      xValue = Xgh*256 + Xgl;
+      yValue = Ygh*256 + Ygl;
+      zValue = Zgh*256 + Zgl;
       
-
       Xg = (float)xValue / 16384;
       Yg = (float)yValue / 16384;
       Zg = (float)zValue / 16384;
@@ -145,15 +127,9 @@ void* calculationThread(void* arg){
       Zh = wiringPiI2CReadReg8(fd, 0x47);
       Zl = wiringPiI2CReadReg8(fd, 0x48);
 
-      xGyroData = wiringPiI2CReadReg16(fd, 0x43);
-      yGyroData = wiringPiI2CReadReg16(fd, 0x45);
-      zGyroData = wiringPiI2CReadReg16(fd, 0x47);
-      xDegree = ((float)(xGyroData>>8+xGyroData<<8))/131;
-      yDegree = -((float)(yGyroData>>8+yGyroData<<8))/131;
-      zDegree = ((float)(zGyroData>>8+zGyroData<<8))/131;
-      // xDegree = (float)(Xh * 256 + Xl) / 131;
-      // yDegree = -(float)(Yh * 256 + Yl) / 131;
-      // zDegree = (float)(Zh * 256 + Zl) / 131;
+      xDegree = (float)(Xh * 256 + Xl) / 131;
+      yDegree = -(float)(Yh * 256 + Yl) / 131;
+      zDegree = (float)(Zh * 256 + Zl) / 131;
 
       if (myAbs(xDegree)>4) {
          Xd=xDegree+3.412214;
