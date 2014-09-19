@@ -79,7 +79,7 @@ double getCurrentTime(){
 void* calculationThread(void* arg){
    unsigned static char Xgh,Xgl,Ygh,Ygl,Zgh,Zgl,Xh,Xl,Yh,Yl,Zh,Zl;
    uint16_t xGyroData, yGyroData, zGyroData, xAccData, yAccData, zAccData;
-   short xValue, yValue, zValue;
+   uint16_t xValue, yValue, zValue;
    float xDegree, yDegree, zDegree;
    float Xg, Yg, Zg, pa, ra, ya;
    float Xd, Yd, Zd;
@@ -104,10 +104,10 @@ void* calculationThread(void* arg){
 
       //Check if we use the 16-bit register
       xAccData = wiringPiI2CReadReg16(fd, 0x3B);
-      yAccData = wiringPiI2CReadReg16(fd, 0x3C);
-      zAccData = wiringPiI2CReadReg16(fd, 0x3D);
+      yAccData = wiringPiI2CReadReg16(fd, 0x3D);
+      zAccData = wiringPiI2CReadReg16(fd, 0x3F);
 
-      printf("Xgh: %X, Xgl: %X.\n", Xgh, Xgl);
+      printf("Xgh: %X, Xgl: %X, Ygh: %X, Ygl: %X, Zgh: %X, Zgl: %X.\n", Xgh, Xgl, Ygh, Ygl, Zgh, Zgl);
       printf("xAccData: %X., yAccData: %X, zAccData: %X.\n", xAccData, yAccData, zAccData);
 
       xValue = xAccData>>8;
