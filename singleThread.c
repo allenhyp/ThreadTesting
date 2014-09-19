@@ -86,10 +86,10 @@ void* calculationThread(void* arg){
    float pitch = 0, roll = 0, yaw = 0;
    float fma;
    int i = 0;
-   //Start the loop
+   // Start the loop
    while(i<COUNT){
       cycleStartTime = getCurrentTimeInMicro();
-      //Get and Set Acc data
+      // Get and Set Acc data
       //********************
       Xgh = wiringPiI2CReadReg8(fd, 0x3B);
       Xgl = wiringPiI2CReadReg8(fd, 0x3C);
@@ -116,7 +116,7 @@ void* calculationThread(void* arg){
       rollACC = atan(Xg/ra)*180/pi;
       yawACC = atan(ya/Zg)*180/pi;
 
-      //Get and Set Gyro data
+      // Get and Set Gyro data
       //*********************
       Xh = wiringPiI2CReadReg8(fd, 0x43);
       Xl = wiringPiI2CReadReg8(fd, 0x44);
@@ -153,7 +153,7 @@ void* calculationThread(void* arg){
       else {
          Zd=0;
       }
-      //Get time eclipsed
+      // Get time eclipsed
       nowTime - getCurrentTimeInMicro();
       dt = ((double)nowTime - lastTime)/1000000;
       lastTime = nowTime;
@@ -171,33 +171,33 @@ void* calculationThread(void* arg){
       }
       
 
-      //Print the result
+      // Print the result
       // printf("pitchACC: %f, rollACC: %f, yawACC: %f.\n", pitchACC, rollACC, yawACC);
       // printf("pitch: %f, roll: %f, yaw: %f.\n", pitch, roll, yaw);
-      // printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
-      // printf("===================================================================\n");
+      printf("pitch_cf: %f, roll_cf: %f, yaw_cf: %f.\n", pitch_cf, roll_cf, yaw_cf);
+      printf("===================================================================\n");
 
-      //Sleep for the rest of time
+      // Sleep for the rest of time
       restTime = getCurrentTimeInMicro() - cycleStartTime;
       if (restTime < TIMELIMIT){
-         // printf("restTime: %f.\n", restTime);
+         printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
       }
-      // else{
-      //    printf("Timeout!\n");
-      // }
+      else{
+         printf("Timeout!\n");
+      }
       i++;
    }
 }
 
 int main(){
-   //Setup IO
+   // Setup IO
    fd = wiringPiI2CSetup (0x68);
    wiringPiI2CWriteReg8 (fd,0x6B,0x01); //set the sleep unenable,chose clock source.
    wiringPiI2CWriteReg8 (fd,0x19,0x01); //set sample rate divide = 0
    wiringPiI2CWriteReg8 (fd,0x1A,0x01); //set gyroscope output rate = 8khz
 
-   //Setup pthread
+   // Setup pthread
    int ret;
    pthread_t threadAlgo;
    pthread_attr_t attrMain;
@@ -212,7 +212,7 @@ int main(){
    pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
    printf("Started.\n");
    while(!pthread_join(threadAlgo, NULL)){
-      //printf("ing\n");
+      // printf("ing\n");
    }
    printf("ENDED\n");
    pthread_exit(&threadAlgo);
