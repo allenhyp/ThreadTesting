@@ -180,12 +180,12 @@ void* calculationThread(void* arg){
       // Sleep for the rest of time
       restTime = getCurrentTimeInMicro() - cycleStartTime;
       if (restTime < TIMELIMIT){
-         printf("restTime: %f.\n", restTime);
+         // printf("restTime: %f.\n", restTime);
          usleep(TIMELIMIT - restTime);
       }
-      else{
-         printf("Timeout!\n");
-      }
+      // else{
+      //    printf("Timeout!\n");
+      // }
       i++;
    }
 }
