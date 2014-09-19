@@ -87,7 +87,7 @@ void* calculationThread(void* arg){
    float fma;
    int i = 0;
    //Start the loop
-   while(i<COUNT){
+   while(1){
       cycleStartTime = getCurrentTime();
       //Get and Set Acc data
       //********************
@@ -208,7 +208,6 @@ int main(){
    ret = pthread_attr_setschedparam(&attrMain, &parmMain);
 
 
-   int i = 0;
    lastTime - getCurrentTime();
    pthread_create (&threadAlgo, &attrMain, calculationThread, NULL);
    printf("Started.\n");
