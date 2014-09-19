@@ -103,22 +103,22 @@ void* calculationThread(void* arg){
 
 
       //Check if we use the 16-bit register
-      xAccData = wiringPiI2CReadReg16(fd, 0x3B);
-      yAccData = wiringPiI2CReadReg16(fd, 0x3C);
-      zAccData = wiringPiI2CReadReg16(fd, 0x3D);
+      // xAccData = wiringPiI2CReadReg16(fd, 0x3B);
+      // yAccData = wiringPiI2CReadReg16(fd, 0x3C);
+      // zAccData = wiringPiI2CReadReg16(fd, 0x3D);
 
       printf("Xgh: %X, Xgl: %X.\n", Xgh, Xgl);
-      printf("xAccData: %X.\n", xAccData);
+      // printf("xAccData: %X.\n", xAccData);
 
-      xValue = xAccData>>8;
-      xValue = xValue + xAccData<<8;
-      yValue = xAccData>>8;
-      yValue = yValue + yAccData<<8;
-      zValue = zAccData>>8;
-      zValue = zValue + zAccData<<8;
-      // xValue = Xgh*256 + Xgl;
-      // yValue = Ygh*256 + Ygl;
-      // zValue = Zgh*256 + Zgl;
+      // xValue = xAccData>>8;
+      // xValue = xValue + xAccData<<8;
+      // yValue = xAccData>>8;
+      // yValue = yValue + yAccData<<8;
+      // zValue = zAccData>>8;
+      // zValue = zValue + zAccData<<8;
+      xValue = Xgh*256 + Xgl;
+      yValue = Ygh*256 + Ygl;
+      zValue = Zgh*256 + Zgl;
       Xg = (float)xValue / 16384;
       Yg = (float)yValue / 16384;
       Zg = (float)zValue / 16384;
