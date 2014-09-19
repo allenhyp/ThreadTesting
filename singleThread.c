@@ -3,6 +3,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <pthread.h>
 #include <time.h>
